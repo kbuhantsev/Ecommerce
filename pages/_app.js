@@ -2,9 +2,10 @@ import isPropValid from "@emotion/is-prop-valid";
 import { StyleSheetManager, createGlobalStyle } from "styled-components";
 
 import { Roboto } from "next/font/google";
+import { CartContextProvider } from "@/components/CartContext";
 
 const roboto = Roboto({
-  weight: ["400", "700"],
+  weight: ["400", "500", "700"],
   subsets: ["latin"],
   display: "swap",
 });
@@ -23,7 +24,9 @@ export default function App({ Component, pageProps }) {
     <main className={roboto.className}>
       <StyleSheetManager shouldForwardProp={isPropValid}>
         <GlobalStyles />
-        <Component {...pageProps} />
+        <CartContextProvider>
+          <Component {...pageProps} />
+        </CartContextProvider>
       </StyleSheetManager>
     </main>
   );
