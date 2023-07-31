@@ -2,6 +2,7 @@ import Button from "@/components/Button";
 import { CartContext } from "@/components/CartContext";
 import Center from "@/components/Center";
 import Header from "@/components/Header";
+import Table from "@/components/Table";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
@@ -28,6 +29,20 @@ const Box = styled.div`
   } */
 `;
 
+const ProductInfoCell = styled.td`
+  img {
+    max-width: 150px;
+    max-height: 150px;
+  }
+`;
+
+const ProductImageBox = styled.div`
+  max-width: 150px;
+  max-height: 150px;
+  padding: 10px;
+  background-color: #f0f0f0;
+`;
+
 export default function CartPage() {
   const { cartProducts } = useContext(CartContext);
   const [products, setProducts] = useState([]);
@@ -40,6 +55,7 @@ export default function CartPage() {
       }
     }
     getData();
+    console.log(products);
   }, [cartProducts]);
 
   return (
@@ -48,16 +64,30 @@ export default function CartPage() {
       <Center>
         <ColumnsWrapper>
           <Box>
+            <h2>Cart</h2>
             {!cartProducts?.length && <div>Your cart is empty</div>}
             {products?.length > 0 && (
-              <>
-                <h2>Cart</h2>
-                {products.map(({ _id, title }) => (
-                  <div key={_id}>
-                    {title}: {cartProducts.filter((id) => id === _id).length}
-                  </div>
-                ))}
-              </>
+              <Table>
+                <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {products.map(({ _id, title, price, images }) => (
+                    <tr key={_id}>
+                      <ProductInfoCell>
+                        <img src={images[0].url} alt="" />
+                        {title}
+                      </ProductInfoCell>
+                      <td>{cartProducts.filter((id) => id === _id).length}</td>
+                      <td>{price}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
             )}
           </Box>
           {cartProducts?.length > 0 && (
