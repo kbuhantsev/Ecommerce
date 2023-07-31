@@ -10,10 +10,17 @@ export const ButtonStyle = css`
   text-decoration: none;
   font-family: "Roboto", sans-serif;
   font-weight: 500;
+  cursor: pointer;
   svg {
     height: 16px;
     margin-right: 5px;
   }
+  ${(props) =>
+    props.block &&
+    css`
+      display: block;
+      width: 100%;
+    `}
   ${(props) =>
     props.white &&
     !props.outline &&
