@@ -1,5 +1,8 @@
 import { mongooseConnect } from "@/lib/mongoose";
+import { Order } from "@/models/Order";
 import { Product } from "@/models/Product";
+
+const stripe = require("stripe")(process.env.STRIPE_SK);
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -26,11 +29,32 @@ export default async function handler(req, res) {
         price_data: {
           currency: "USD",
           product_data: { name: productInfo.title },
-          unit_amount: quantity + productInfo.price,
+          unit_amount: quantity + productInfo.price * 100,
         },
       });
     }
   }
 
-  res.json({ lineItems });
+  const orderDoc = await Order.create({
+    name,
+    email,
+    city,
+    postalCode,
+    streetAddress,
+    country,
+    paid: false,
+  });
+
+  const session = await stripe.checkout.sessions.create({
+    line_items: lineItems,
+    mode: "payment",
+    customer_email: email,
+    success_url: process.env.URL + "/cart?success=1",
+    cancel_url: process.env.URL + "/cart?canceled=1",
+    metadata: { orderId: orderDoc._id.toString() },
+  });
+
+  res.json({
+    url: session.url,
+  }); //redirect()
 }
