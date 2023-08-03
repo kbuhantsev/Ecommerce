@@ -11,10 +11,17 @@ export default async function handler(req, res) {
 
   await mongooseConnect();
 
-  const { name, email, city, postalCode, streetAddress, country, products } =
-    req.body;
-  const productsIds = products.split(",");
-  const uniqueIds = [...new Set(productsIds)];
+  const {
+    name,
+    email,
+    city,
+    postalCode,
+    streetAddress,
+    country,
+    cartProducts,
+  } = req.body;
+
+  const uniqueIds = [...new Set(cartProducts)];
   const productsInfos = await Product.find({ _id: uniqueIds });
 
   let lineItems = [];
@@ -22,7 +29,7 @@ export default async function handler(req, res) {
     const productInfo = productsInfos.find(
       (p) => p._id.toString() === productId
     );
-    const quantity = productsIds.filter((id) => id === productId)?.length || 0;
+    const quantity = cartProducts.filter((id) => id === productId)?.length || 0;
     if (quantity > 0 && productInfo) {
       lineItems.push({
         quantity,
@@ -36,6 +43,7 @@ export default async function handler(req, res) {
   }
 
   const orderDoc = await Order.create({
+    lineItems,
     name,
     email,
     city,
