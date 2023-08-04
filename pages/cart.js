@@ -51,7 +51,17 @@ const CityHolder = styled.div`
   gap: 5px;
 `;
 
-export default function CartPage() {
+export const getServerSideProps = async (context) => {
+  const query = context.query;
+
+  return {
+    props: {
+      query,
+    },
+  };
+};
+
+export default function CartPage({ query }) {
   const { cartProducts, addProduct, removeProduct } = useContext(CartContext);
   const [products, setProducts] = useState([]);
   const [name, setName] = useState("");
@@ -60,6 +70,8 @@ export default function CartPage() {
   const [postalCode, setPostalCode] = useState("");
   const [streetAddress, setStreetAddress] = useState("");
   const [country, setCountry] = useState("");
+
+  const router = useRouter();
 
   useEffect(() => {
     async function getData() {
@@ -91,7 +103,7 @@ export default function CartPage() {
     });
 
     if (response.data.url) {
-      window.location = response.data.url;
+      router.push(response.data.url);
     }
   }
 
@@ -101,23 +113,21 @@ export default function CartPage() {
     total += price;
   }
 
-  console.log(window.pathname);
-
-  // if (window.pathname.includes("success")) {
-  //   return (
-  //     <>
-  //       <Header />
-  //       <Center>
-  //         <ColumnsWrapper>
-  //           <Box>
-  //             <h1>Thanks for your order!</h1>
-  //             <p>We will email you when your order will be sent.</p>
-  //           </Box>
-  //         </ColumnsWrapper>
-  //       </Center>
-  //     </>
-  //   );
-  // }
+  if (query.hasOwnProperty("success")) {
+    return (
+      <>
+        <Header />
+        <Center>
+          <ColumnsWrapper>
+            <Box>
+              <h1>Thanks for your order!</h1>
+              <p>We will email you when your order will be sent.</p>
+            </Box>
+          </ColumnsWrapper>
+        </Center>
+      </>
+    );
+  }
 
   return (
     <>

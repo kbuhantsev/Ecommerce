@@ -43,7 +43,7 @@ export default async function handler(req, res) {
   }
 
   const orderDoc = await Order.create({
-    lineItems,
+    line_items: lineItems,
     name,
     email,
     city,
