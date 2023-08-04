@@ -22,15 +22,8 @@ const Wrapper = styled.div`
   padding: 20px 0;
 `;
 
-const NavLink = styled(Link)`
-  display: block;
-  color: #aaa;
-  text-decoration: none;
-`;
-
 const StyledNav = styled.nav`
   display: ${(p) => (p.mobileNavActive ? "block" : "none")};
-  //display: block;
   gap: 15px;
   position: fixed;
   top: 0;
@@ -42,6 +35,16 @@ const StyledNav = styled.nav`
   @media screen and (min-width: 768px) {
     position: static;
     display: flex;
+    padding: 0;
+  }
+`;
+
+const NavLink = styled(Link)`
+  display: block;
+  color: #aaa;
+  text-decoration: none;
+  padding: 10px 0;
+  @media screen and (min-width: 768px) {
     padding: 0;
   }
 `;
