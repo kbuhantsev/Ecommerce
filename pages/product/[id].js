@@ -1,28 +1,31 @@
 import Center from "@/components/Center";
 import Header from "@/components/Header";
-import ProductsGrid from "@/components/ProductsGrid";
 import Title from "@/components/Title";
 import { mongooseConnect } from "@/lib/mongoose";
 import { Product } from "@/models/Product";
 
-export default function ProductsPage({ products }) {
+export default function ProductPage({ product }) {
+  const { title, category, description, price, images, properties } = product;
+
   return (
     <>
       <Header />
       <Center>
-        <Title>All products</Title>
-        <ProductsGrid products={products} />
+        <Title>{title}</Title>
       </Center>
     </>
   );
 }
 
-export const getServerSideProps = async () => {
+export const getServerSideProps = async (context) => {
   await mongooseConnect();
-  const products = await Product.find({}, null, { sort: { _id: -1 } });
+
+  const { id } = context.query;
+  const product = await Product.findById(id);
+
   return {
     props: {
-      products: JSON.parse(JSON.stringify(products)),
+      product: JSON.parse(JSON.stringify(product)),
     },
   };
 };
