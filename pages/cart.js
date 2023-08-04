@@ -62,7 +62,8 @@ export const getServerSideProps = async (context) => {
 };
 
 export default function CartPage({ query }) {
-  const { cartProducts, addProduct, removeProduct } = useContext(CartContext);
+  const { cartProducts, addProduct, removeProduct, clearCart } =
+    useContext(CartContext);
   const [products, setProducts] = useState([]);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -82,6 +83,13 @@ export default function CartPage({ query }) {
     }
     getData();
   }, [cartProducts]);
+
+  useEffect(() => {
+    if (query.hasOwnProperty("success")) {
+      clearCart();
+    }
+    // eslint-disable-next-line
+  }, []);
 
   function moreOfThisProduct(id) {
     addProduct(id);
