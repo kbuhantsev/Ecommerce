@@ -1,8 +1,9 @@
 import Link from "next/link";
 import styled from "styled-components";
 import Center from "./Center";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { CartContext } from "./CartContext";
+import BarsIcon from "./icons/Bars";
 
 const StyledHeader = styled.header`
   background-color: #222;
@@ -11,6 +12,8 @@ const StyledHeader = styled.header`
 const Logo = styled(Link)`
   color: #fff;
   text-decoration: none;
+  position: relative;
+  z-index: 3;
 `;
 
 const Wrapper = styled.div`
@@ -20,30 +23,61 @@ const Wrapper = styled.div`
 `;
 
 const NavLink = styled(Link)`
+  display: block;
   color: #aaa;
   text-decoration: none;
 `;
 
 const StyledNav = styled.nav`
-  display: flex;
+  display: ${(p) => (p.mobileNavActive ? "block" : "none")};
+  //display: block;
   gap: 15px;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 20px;
+  right: 0;
+  padding: 50px 20px 20px;
+  background-color: #222;
+  @media screen and (min-width: 768px) {
+    position: static;
+    display: flex;
+    padding: 0;
+  }
+`;
+
+const NavButton = styled.button`
+  background-color: transparent;
+  width: 35px;
+  width: 35px;
+  border: 0;
+  color: white;
+  cursor: pointer;
+  position: relative;
+  z-index: 3;
+  @media screen and (min-width: 768px) {
+    display: none;
+  }
 `;
 
 export default function Header() {
   const { cartProducts } = useContext(CartContext);
-
+  const [mobileNavActive, setMobileNavActive] = useState(false);
   return (
     <StyledHeader>
       <Center>
         <Wrapper>
           <Logo href={"/"}>Ecommerce</Logo>
-          <StyledNav>
+          <StyledNav mobileNavActive={mobileNavActive}>
             <NavLink href={"/"}>Home</NavLink>
             <NavLink href={"/products"}>All products</NavLink>
             <NavLink href={"/caregories"}>Caregories</NavLink>
             <NavLink href={"/account"}>Account</NavLink>
             <NavLink href={"/cart"}>Cart ({cartProducts.length})</NavLink>
           </StyledNav>
+          <NavButton onClick={() => setMobileNavActive(!mobileNavActive)}>
+            <BarsIcon />
+          </NavButton>
         </Wrapper>
       </Center>
     </StyledHeader>
