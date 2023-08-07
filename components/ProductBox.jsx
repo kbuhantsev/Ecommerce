@@ -3,8 +3,8 @@ import Button from "./Button";
 import Link from "next/link";
 import { CartContext } from "./CartContext";
 import { useContext } from "react";
-
-const ProductWrapper = styled.div``;
+import Image from "next/image";
+import ImageWrapper from "./ImageWrapper";
 
 const WhiteBox = styled(Link)`
   background-color: #fff;
@@ -15,10 +15,6 @@ const WhiteBox = styled(Link)`
   align-items: center;
   justify-content: center;
   border-radius: 10px;
-  img {
-    max-width: 100%;
-    max-height: 100px;
-  }
 `;
 
 const Title = styled(Link)`
@@ -64,11 +60,16 @@ export default function ProductBox({ _id, title, price, images }) {
   }
 
   return (
-    <ProductWrapper>
+    <div>
       <WhiteBox href={url}>
-        <div>
-          <img src={images[0]?.url} alt={title} />
-        </div>
+        <ImageWrapper>
+          <Image
+            src={images[0]?.url}
+            alt={title}
+            fill
+            style={{ objectFit: "contain" }}
+          />
+        </ImageWrapper>
       </WhiteBox>
       <ProductInfoBox>
         <Title href={url}>{title}</Title>
@@ -79,6 +80,6 @@ export default function ProductBox({ _id, title, price, images }) {
           </Button>
         </PriceRow>
       </ProductInfoBox>
-    </ProductWrapper>
+    </div>
   );
 }

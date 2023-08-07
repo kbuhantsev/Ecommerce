@@ -32,6 +32,7 @@ const StyledNav = styled.nav`
   right: 0;
   padding: 50px 20px 20px;
   background-color: #222;
+  z-index: 3;
   @media screen and (min-width: 768px) {
     position: static;
     display: flex;

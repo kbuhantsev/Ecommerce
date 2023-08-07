@@ -6,6 +6,7 @@ import ButtonLink from "./ButtonLink";
 import CartIcon from "./icons/Cart";
 import { useContext } from "react";
 import { CartContext } from "./CartContext";
+import ImageWrapper from "./ImageWrapper";
 
 const Bg = styled.div`
   background-color: #222;
@@ -46,6 +47,10 @@ const Column = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 200px;
+  @media screen and (min-width: 768px) {
+    height: auto;
+  }
 `;
 
 const ButtonsWrapper = styled.div`
@@ -85,12 +90,14 @@ export default function Featured({ product }) {
             </div>
           </Column>
           <Column>
-            <Image
-              src={product?.images[0].url}
-              alt="Iphone 14 Pro Black"
-              width={300}
-              height={300}
-            />
+            <ImageWrapper>
+              <Image
+                src={product?.images[0].url}
+                alt={product?.title}
+                fill
+                style={{ objectFit: "contain" }}
+              />
+            </ImageWrapper>
           </Column>
         </ColumnsWrapper>
       </Center>

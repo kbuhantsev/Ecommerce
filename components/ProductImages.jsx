@@ -1,15 +1,7 @@
+import Image from "next/image";
 import { useState } from "react";
-import styled, { css } from "styled-components";
-
-const Image = styled.img`
-  max-width: 100%;
-  max-height: 100%;
-`;
-
-const BigImage = styled.img`
-  max-width: 100%;
-  max-height: 300px;
-`;
+import styled from "styled-components";
+import ImageWrapper from "./ImageWrapper";
 
 const ImageButtons = styled.div`
   display: flex;
@@ -22,6 +14,7 @@ const ImageButton = styled.div`
   border: 1px solid #ccc;
   border-radius: 5px;
   height: 80px;
+  width: 80px;
   cursor: pointer;
   padding: 2px;
   border-color: ${(p) => (p.active ? "#ccc" : "transparent")};
@@ -29,7 +22,10 @@ const ImageButton = styled.div`
 `;
 
 const BigImageWrapper = styled.div`
+  position: relative;
   text-align: center;
+  width: 100%;
+  height: 300px;
 `;
 
 export default function ProductImages({ images }) {
@@ -38,7 +34,12 @@ export default function ProductImages({ images }) {
   return (
     <>
       <BigImageWrapper>
-        <BigImage src={activeImage} alt="product image" />
+        <Image
+          src={activeImage}
+          alt="product image"
+          fill
+          style={{ objectFit: "contain" }}
+        />
       </BigImageWrapper>
       <ImageButtons>
         {images.map(({ url, _id }) => (
@@ -47,7 +48,15 @@ export default function ProductImages({ images }) {
             active={url === activeImage}
             onClick={() => setActiveImage(url)}
           >
-            <Image src={url} key={_id} alt="product image" />
+            <ImageWrapper>
+              <Image
+                src={url}
+                key={_id}
+                alt="product image"
+                fill
+                style={{ objectFit: "contain" }}
+              />
+            </ImageWrapper>
           </ImageButton>
         ))}
       </ImageButtons>
